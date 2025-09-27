@@ -4,13 +4,10 @@ import marvin.io.MarvinImageIO;
 public class Main {
     public static void main(String[] args) {
 
-        MarvinImage image = MarvinImageIO.loadImage("yesh.jpg");
+        MarvinImage image = MarvinImageIO.loadImage("ascii-pineapple.jpg");
 
         int width = image.getWidth();
         int height = image.getHeight();
-        /*  // Display the width and height
-        System.out.println("Height: " + image.getHeight() + "\nWidth: " + image.getWidth() );
-        */
 
         // Loading image's rgb into the matrix
         Pixel[][] tuples =  new Pixel[height][width];
@@ -23,39 +20,23 @@ public class Main {
             }
         }
 
-        /*  // Display the matrix
-        for  (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                System.out.println(tuples[y][x].toString());
-            }
-        }
-         */
-
         // Declaring the matrix of brightness
-        Brightness[][] brightness = new  Brightness[height][width];
+        int[][] brightness = new  int[height][width];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                brightness[y][x] = new Brightness(tuples[y][x].getRed(), tuples[y][x].getGreen(), tuples[y][x].getBlue());
+                brightness[y][x] = ((tuples[y][x].getRed() + tuples[y][x].getGreen() + tuples[y][x].getBlue()) / 3);
             }
         }
-
-        /*  Display brightness matrix
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                System.out.println(brightness[x][y]);
-            }
-        }
-        */
 
         String allAsciiOptions = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
 
-        Ascii[][] ascii = new Ascii[height][width];
+        char[][] ascii = new char[height][width];
         double ConvertedValue;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                ConvertedValue = brightness[y][x].getBrightness() * (allAsciiOptions.length() - 1) / 255;
+                ConvertedValue = brightness[y][x] * (allAsciiOptions.length() - 1) / 255.0;
                 int element = (int) Math.round(ConvertedValue);
-                ascii[y][x] = new Ascii(allAsciiOptions.charAt(element));
+                ascii[y][x] = allAsciiOptions.charAt(element);
             }
         }
 
@@ -63,11 +44,9 @@ public class Main {
         for (int y = 0; y < height; y++) {
             System.out.println();
             for (int x = 0; x < width; x++) {
-                System.out.print(ascii[y][x].getSymbol());
+                System.out.print(ascii[y][x]);
             }
         }
-
-
 
     }
 }
